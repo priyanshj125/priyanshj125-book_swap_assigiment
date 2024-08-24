@@ -2,31 +2,34 @@ import React from 'react'
 import { useEffect,useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
-import ButtonBlack from '../../components/ButtonBlack'
+import ButtonBlack from '../../components/ButtonBlack.jsx'
 // import Loading from './component/los/loading'
 import Loading from '../../components/loading.jsx'
+import { Book } from '../../../../backend/model/bookmodel.js'
+
  
-const Showbook = () => {
+const ShowBook = () => {
   const [book,setBooks] = useState({}) ;
   const [loading,setloading] = useState(false)
   const {id}=useParams();
   useEffect(() => {
-    setloading(true)
+    setloading(true);
     axios
-  .get(`https://localhost:5000/books/${id}`)
-   .then((response) => {
-    setBooks(response.data);
-    setloading(false) 
-  }).catch((err) => {
-    console.log(err);
-    setloading(false)
-  })
-  },[])
+      .get(`http://localhost:5000/books/${id}`)
+      .then((response) => {
+        setBooks(response.data);
+        setloading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setloading(false);
+      });
+  }, []);
   return (
     <div className='p-4'>
       <ButtonBlack />
       <h1 className='text-3xl my-4'>showbook</h1>
-      {loading? (<Loading />): (
+      {loading? (<Loading/>): (
         <div className='flex flex-col gap-4 border-2 border-sky-400 rounded-xl w-fit p-4'>
           <div className='my-4'>
           <span className='text-x1 mr-4 text-gray-500'>ID</span>
@@ -64,4 +67,4 @@ const Showbook = () => {
   )
 }
 
-export default Showbook;
+export default ShowBook;
