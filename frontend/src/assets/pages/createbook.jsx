@@ -12,6 +12,9 @@ const Createbook = () => {
   const [publishyear, setPublishyear] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  console.log(token);
+
     const { enqueueSnackbar } = useSnackbar();
   
     const handleSaveBook = () => {
@@ -22,7 +25,12 @@ const Createbook = () => {
       };
       setLoading(true);
       axios
-        .post('http://localhost:5000/books', data)
+        .post('http://localhost:5000/books', data,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        })
         .then(() => {
           setLoading(false);
           enqueueSnackbar('Book Created successfully', { variant: 'success' });

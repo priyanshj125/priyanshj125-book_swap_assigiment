@@ -1,31 +1,37 @@
-import express, { response } from 'express';
-import {PORT,mongoDBURL} from './config.js';
-import {Book} from './model/bookmodel.js';
-import bookRoutes from './routes/bookroutes.js';
-import cors from 'cors';
-
+import express from 'express';
+import { PORT, mongoDBURL } from './config.js';
 import mongoose from 'mongoose';
-const app = express();
-app.use(express.json()); 
-app.use(cors(
-    { origin:'*',
-     methods:["POST","GET","DELETE","PUT"],
-     Credentials:true
-   }
-   ))
+import { Book } from './model/bookmodel.js';
+import router from './routes/bookroutes.js';
+import cors from 'cors';
+import connectDb from './db.js';
+import authrouter from './routes/auth.js';
+
+const app = express(); 
+const port = 5000;
+
+app.use(express.json());
+app.use(cors({
+    origin: '*',
+    methods: ["POST", "GET", "DELETE", "PUT"],
+    credentials: true
+}));
+
 app.get('/', (req, res) => {
-     console.log(res);
-     return res.status(404).send( "book exchange") ;
+    console.log(res);
+    return res.status(404).send("book exchange");
 });
 
-app.use('/books',bookRoutes);
-mongoose
-   .connect(mongoDBURL)
-   .then(() => {console.log("MongoDB Connected...");
-    app.listen(PORT,()=>{
-        console.log(`Server running on port ${PORT}`)
-    });
-   })
-   .catch((err) => {console.log(err)});
 
-    
+app.use('/books', router);
+app.use('/api/auth', authrouter);
+
+
+
+connectDb().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}).catch((err) => {
+    console.log(err);
+});

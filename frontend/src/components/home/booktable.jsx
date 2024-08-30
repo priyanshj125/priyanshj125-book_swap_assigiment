@@ -1,12 +1,25 @@
-import React from 'react'
+import React ,{useEffect}from 'react'
 // import Loading from '../../components/loading'
 import { Link } from 'react-router-dom'
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md'; 
+import { useNavigate} from'react-router-dom';
+
 
 const Booktable = ({books}) => {
+  let navigate = useNavigate();
+  useEffect(()=>{
+    if (localStorage.getItem("token")) {
+      // fetchalldata();
+    }
+    else {
+      navigate("/login");     
+    }
+
+  },[])
   return (
+
     <div>
          <table className='w-full border-separate border-spacing-2'>
           <thead>

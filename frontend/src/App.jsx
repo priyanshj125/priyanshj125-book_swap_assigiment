@@ -7,6 +7,9 @@ import EditBook from './assets/pages/editBook.jsx';
 import Deletebook from './assets/pages/deletebook.jsx';
 import Navbar from './components/navbar.jsx';
 import Login from './components/login.jsx';
+import Card from './components/home/card.jsx';
+import Yourbooks from './components/home/yourbooks.jsx';
+import Signup from './components/signup.jsx';
 
 const App = () => {
   return (
@@ -18,10 +21,11 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route exact path="/Login" element={<Login/>}/>
+        <Route exact path="/signup" element={<Signup/>}/>
         <Route exact path='/books/create' element={<CreateBook />} />
         <Route exact path='/books/details/:id' element={<ShowBook />} />
         <Route exact path='/home' element={<Home/>} />
-        <Route exact path='/yourbooks' element={<Home/>} />
+        <Route exact path='/yourbooks' element={<Yourbooks/>} />
         <Route path='/books/edit/:id' element={<EditBook />} />
         <Route path='/books/delete/:id' element={<Deletebook />} />
       </Routes>

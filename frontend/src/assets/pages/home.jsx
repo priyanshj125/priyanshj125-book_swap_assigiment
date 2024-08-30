@@ -11,7 +11,7 @@ import Card from '../../components/home/card';
 const Home = () => {
   const [books, setBooks] = useState([]) 
   const [loading,setloading] = useState(false)
-  const [ShowType,setShowType] = useState('card') 
+  const [ShowType,setShowType] = useState('table') 
   useEffect(() => {
     setloading(true)
     axios.get('http://localhost:5000/books')
@@ -25,12 +25,7 @@ const Home = () => {
   },[]);
   return (
     <div className='p-4'>
-       <div className='flex justify-center items-center gap-x-4'>
-      <button
-          className='bg-sky-300 hover:bg-sky-500 px-4 py-1 rounded-lg'
-          onClick={() => setShowType('table')} >
-          Table
-        </button>
+       <div className='flex justify-center items-center gap-x-4'>   
         <button 
           className='bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg'
           onClick={() => setShowType('card')}
@@ -39,16 +34,16 @@ const Home = () => {
         </button>
       </div>
       <div className='flex justify-between item-center'>
-         <h1 className='text-3xl my-8'>book list</h1>
+         <h1 className='text-3xl my-8'>all book list</h1>
          <Link to='/books/create'>
             <MdOutlineAddBox size='30' className='test-sky-800 text-4xl' color='blue' />
          </Link> 
 
       </div>
       {loading ?(<Loading/>) : ShowType === 'table' ? (
-        <Booktable books={books} />
-      ) : (
         <Card books={books} />
+      ) : (
+        <Booktable books={books} />
       )}
     </div>
   )

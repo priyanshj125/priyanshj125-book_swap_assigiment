@@ -1,6 +1,20 @@
 import express from 'express';
 import { Book } from '../model/bookmodel.js';
-const router= express.Router(); 
+import fetchuser from '../model/middleware/fetchuser.js';
+import { body, validationResult } from 'express-validator';
+import { model } from 'mongoose';
+import User from '../model/user.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+const router = express.Router();
+
+const JWT_SECRET = 'priyansh123';
+
+  //user books
+
+
+
 //fetch all books
 router.get('/', async(req, res) => {
     try {
@@ -13,82 +27,130 @@ router.get('/', async(req, res) => {
     }
 
 });
-// fetch all books by id
-router.get('/:id', async(req, res) => {
-    try {
-        const {id}=req.params;
-        const book = await Book.findById(id);
-        return  res.status(200).json(book) ;
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send({message: error.message});
-     
-    }
 
+router.get('/fetch', fetchuser, async (req, res) => {
+  try {
+    const { publishyear } = req.query;
+    let books;
+    if(publishyear){
+       books = await Book.find({ user: req.user.id});
+    }else{
+     books = await Book.find({ user: req.user.id  });
+  }
+    res.json(books);
+  } catch (error) {
+    res.status(400).send({ error: "servies problem part 3 dume 401" })
+    console.log(error)
+  }
 });
-// update book
-router.put ('/:id', async (req, res) => {
-    try {
-       if(
-       !req.body.title ||
-       !req.body.publishyear ||
-       !req.body.author
-       ){
-          return res.status(400).send({
-            message:"send all req detail" 
-          })
-       }
-      const {id} = req.params;
-      const result=await Book.findByIdAndUpdate(id,req.body)
-      if (!result) {
-        return res.status(404).send({message:"book not found"})
-        
+router.post('/addnotes',fetchuser, [
+  body('title').not().isEmpty().withMessage('Title is required'),
+  body('author').not().isEmpty().withMessage('author is required').isLength({ min: 2 }),
+
+], async (req, res) => {
+
+  try {
+    const { title, author, publishyear } = req.body;
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(410).json({ error: error.array() });
+    }
+    
+    const books = new Book({ title, author, user: req.user.id, publishyear });
+    console.log(books);
+    const notessave = await books.save()
+    res.json(books);
+  } catch (error) {
+    res.status(420).send({ error: "servies problem dume part 2 401" })
+    console.log(error.message);
+    console.log(error)
+  }
+});
+router.put('/updatenote/:id', fetchuser, async (req, res) => {
+  try {
+    const { title, author, publishyear } = req.body;
+    // Create a newBook object
+    const newBook = {};
+    if (title) { newBook.title = title };
+    if (author) { newBook.author = author };
+    if (publishyear) { newBook.publishyear = publishyear };
+
+    // Find the note to be updated and update it
+    let book = await Book.findById(req.params.id);
+    // console.log(req.params.id); 
+    // console.log(note.user);
+    if (!book) { return res.status(404).send("Not Found") }
+    console.log(book);
+ 
+    if (book.user.toString() !== req.user.id) {
+      // console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+      return res.status(401).send("Not Allowed");
+    }
+    book = await Book.findByIdAndUpdate(req.params.id, { $set: newBook }, { new: false })
+    res.json({ book });
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+)
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+  try {
+    // Find the note to be delete and delete it
+    let book = await Book.findById(req.params.id);
+    if (!book) { return res.status(404).send("Not Found") }
+
+    // Allow deletion only if user owns this Note
+    if (book.user.toString() !== req.user.id) {
+        return res.status(401).send("Not Allowed");
+    }
+
+    book = await Book.findByIdAndDelete(req.params.id)
+    res.json({ "Success": "BOOK has been deleted", book: book });
+} catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+}
+}
+)
+router.post('/login', [
+  body('email').isEmail().withMessage('Email is not valid'),
+  body('password').exists().withMessage('Password cannot be blank')
+], async (req, res) => {
+  let success = false;
+
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+      return res.status(400).json({ error: error.array() });
+  }
+  const { email, password } = req.body;
+  try {
+      let user = await User.findOne({ email: email });
+      if (!user) {
+          return res.status(400).json({ success, error: 'Email not found' });
       }
-      return res.status(200).send({message:'updates updated successfully'})
 
-    } catch (error) {
-       console.log(error.message); 
-       res.status(500).send({message:error.message});       
-    }
-})
-// delete book
-router.delete('/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const result = await Book.findByIdAndDelete(id);
-        if (!result) {
-            return res.status(404).send({message: "Book not found"});
-        }
-        return  res.status(200).send({message:'Book deleted successfully'});
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send({message: error.message});
-    }
-}); 
-router.post('/', async (req, res) => {
-     try {
-        if(
-        !req.body.title ||
-        !req.body.publishyear ||
-        !req.body.author
-        ){
-            console.log(req.body.title);
-            console.log(req.body.publishyear);
-            console.log(req.body.auther);
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+          return res.status(400).json({ success, error: 'Password does not match' });
+      }
 
-            return res.status(400).send({message: "All fields are required!"});
+      const data = {
+          user: {
+              id: user._id
+          }
+      };
 
-        }
-        const newBook = new Book({
-            title: req.body.title,
-            author: req.body.author,
-            publishyear: req.body.publishyear,
-        });
-        const book = await Book.create(newBook);
-        return res.status(201).send(book);
-     } catch (error) {
-        console.log(error.message); 
-        res.status(500).send({message:error.message});       
-     }
- })
+      console.log(data);
+      const authtoken = jwt.sign(data ,JWT_SECRET);
+      // console.log('Decoded Token:', decoded);
+      success = true;
+      res.json({ success, authtoken });
+  } catch (e) {
+      console.error(e.message);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
 export default router;
