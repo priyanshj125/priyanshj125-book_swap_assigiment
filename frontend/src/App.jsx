@@ -10,6 +10,8 @@ import Login from './components/login.jsx';
 import Card from './components/home/card.jsx';
 import Yourbooks from './components/home/yourbooks.jsx';
 import Signup from './components/signup.jsx';
+import About from './assets/pages/about.jsx';
+import Contact from './assets/pages/contact.jsx';
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
         <Route exact path='/yourbooks' element={<Yourbooks/>} />
         <Route path='/books/edit/:id' element={<EditBook />} />
         <Route path='/books/delete/:id' element={<Deletebook />} />
+        <Route path='/about' element={<About/>} />
+        <Route path='/contact' element={<Contact/>} />
       </Routes>
     </>
   );

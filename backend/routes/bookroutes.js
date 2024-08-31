@@ -43,33 +43,18 @@ router.get('/fetch', fetchuser, async (req, res) => {
     console.log(error)
   }
 });
-// router.post('/addnotes',fetchuser, [
-//   body('title').not().isEmpty().withMessage('Title is required'),
-//   body('author').not().isEmpty().withMessage('author is required').isLength({ min: 2 }),
+router.get('/:id', async(req, res) => {
+  try {
+      const {id}=req.params;
+      const book = await Book.findById(id);
+      return  res.status(200).json(book) ;
+  } catch (error) {
+      console.log(error.message);
+      res.status(500).send({message: error.message});
+   
+  }
 
-// ], async (req, res) => {
-
-//   try {
-//     console.log("ppppppppppppppppppp");
-//     console.log(req.body);
-//     console.log("ppppppppppppppppppppp");
-//     const { title, author, publishyear } = req.body;
-//     const error = validationResult(req);
-//     if (!error.isEmpty()) {
-//       return res.status(410).json({ error: error.array() });
-//     }
-//     const iduser={ user:req.user.id}
-//     const books = new Book({ title, author,  publishyear, iduser });
-//     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-//     console.log(books);
-//     const notessave = await books.save()
-//     res.json(books);
-//   } catch (error) {
-//     res.status(420).send({ error: "servies problem dume part 2 401" })
-//     console.log(error.message);
-//     console.log(error)
-//   }
-// });
+});
 router.post('/addnotes', fetchuser, [
   body('title').not().isEmpty().withMessage('Title is required'),
   body('author').not().isEmpty().withMessage('Author is required').isLength({ min: 2 }),
