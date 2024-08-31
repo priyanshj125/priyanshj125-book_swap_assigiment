@@ -43,29 +43,67 @@ router.get('/fetch', fetchuser, async (req, res) => {
     console.log(error)
   }
 });
-router.post('/addnotes',fetchuser, [
+// router.post('/addnotes',fetchuser, [
+//   body('title').not().isEmpty().withMessage('Title is required'),
+//   body('author').not().isEmpty().withMessage('author is required').isLength({ min: 2 }),
+
+// ], async (req, res) => {
+
+//   try {
+//     console.log("ppppppppppppppppppp");
+//     console.log(req.body);
+//     console.log("ppppppppppppppppppppp");
+//     const { title, author, publishyear } = req.body;
+//     const error = validationResult(req);
+//     if (!error.isEmpty()) {
+//       return res.status(410).json({ error: error.array() });
+//     }
+//     const iduser={ user:req.user.id}
+//     const books = new Book({ title, author,  publishyear, iduser });
+//     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//     console.log(books);
+//     const notessave = await books.save()
+//     res.json(books);
+//   } catch (error) {
+//     res.status(420).send({ error: "servies problem dume part 2 401" })
+//     console.log(error.message);
+//     console.log(error)
+//   }
+// });
+router.post('/addnotes', fetchuser, [
   body('title').not().isEmpty().withMessage('Title is required'),
-  body('author').not().isEmpty().withMessage('author is required').isLength({ min: 2 }),
-
+  body('author').not().isEmpty().withMessage('Author is required').isLength({ min: 2 }),
+  body('publishyear').not().isEmpty().withMessage('Publish year is required')
 ], async (req, res) => {
-
   try {
+    console.log("Request Body:", req.body);
+    console.log("User:", req.user);
+
     const { title, author, publishyear } = req.body;
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      return res.status(410).json({ error: error.array() });
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    
-    const books = new Book({ title, author, user: req.user.id, publishyear });
-    console.log(books);
-    const notessave = await books.save()
-    res.json(books);
+
+    // Directly use req.user.id for the user field
+    const book = new Book({
+      title,
+      author,
+      publishyear,
+      user: req.user.id
+    });
+
+    console.log("Book to be saved:", book);
+
+    const savedBook = await book.save();
+    res.json(savedBook);
   } catch (error) {
-    res.status(420).send({ error: "servies problem dume part 2 401" })
-    console.log(error.message);
-    console.log(error)
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Server error" });
   }
 });
+
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
   try {
     const { title, author, publishyear } = req.body;
@@ -93,6 +131,30 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
   }
 }
 )
+router.put ('/:id', async (req, res) => {
+  try {
+     if(
+     !req.body.title ||
+     !req.body.publishyear ||
+     !req.body.author
+     ){
+        return res.status(400).send({
+          message:"send all req detail" 
+        })
+     }
+    const {id} = req.params;
+    const result=await Book.findByIdAndUpdate(id,req.body)
+    if (!result) {
+      return res.status(404).send({message:"book not found"})
+      
+    }
+    return res.status(200).send({message:'updates updated successfully'})
+
+  } catch (error) {
+     console.log(error.message); 
+     res.status(500).send({message:error.message});       
+  }
+})
 router.delete('/deletenote/:id', fetchuser, async (req, res) => {
   try {
     // Find the note to be delete and delete it
@@ -112,6 +174,19 @@ router.delete('/deletenote/:id', fetchuser, async (req, res) => {
 }
 }
 )
+router.delete('/:id', async (req, res) => {
+  try {
+      const {id} = req.params;
+      const result = await Book.findByIdAndDelete(id);
+      if (!result) {
+          return res.status(404).send({message: "Book not found"});
+      }
+      return  res.status(200).send({message:'Book deleted successfully'});
+  } catch (error) {
+      console.log(error.message);
+      res.status(500).send({message: error.message});
+  }
+}); 
 router.post('/login', [
   body('email').isEmail().withMessage('Email is not valid'),
   body('password').exists().withMessage('Password cannot be blank')

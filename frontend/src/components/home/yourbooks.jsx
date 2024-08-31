@@ -26,14 +26,16 @@ const Yourbooks = () => {
             setLoading(true);
     
             try {
-                const response = await axios.get('http://localhost:5000/booksU', {
+                const response = await axios.get('http://www.localhost:5000/books/fetch', {
                     headers: {
                         "Content-Type": "application/json",
-                        "auth_token":localStorage.getItem('token')
+                        "Authorization":localStorage.getItem('token')
                     }
                 });
+                console.log("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+                console.log(response.data);
                 // Filter books to show only those added by the logged-in user
-                const userBooks = response.data.data.filter(book => book.addedBy === token); // Adjust the filtering based on how you store user ID
+                const userBooks = response.data; // Adjust the filtering based on how you store user ID
                 setBooks(userBooks);
             } catch (error) {
                 console.error('Error fetching books:', error);

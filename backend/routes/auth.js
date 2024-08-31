@@ -41,9 +41,10 @@ router.post('/createuser', [
             name: user.name,
             email: user.email
         };
-        console.log(data);
+        // console.log(data);
         const authtoken = jwt.sign(data,JWT_SECRET,{ algorithm: 'HS384' });
         const zzzz =jwt.verify(authtoken,JWT_SECRET);
+        // console.log(zzzz);
         success = true;
         res.json({ success, token: authtoken });
     } catch (e) {
@@ -80,9 +81,7 @@ router.post('/login', [
             }
         };
 
-        console.log(data);
         const authtoken = jwt.sign(data ,JWT_SECRET);
-        // console.log('Decoded Token:', decoded);
         success = true;
         res.json({ success, authtoken });
     } catch (e) {
