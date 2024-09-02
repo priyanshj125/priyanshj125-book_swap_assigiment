@@ -15,6 +15,7 @@ const Navbar = () => {
   return (
     <div>
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
+        <h1 class='text-3xl font-extralight text-black-600 tracking-tight'>swapnow</h1>
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
           <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/home">Home</Link></li>
           <li className="text-gray-300">
@@ -33,11 +34,11 @@ const Navbar = () => {
         </ul>
         {!token ? (
           <>
-            <Link className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200" to="/login">Sign In</Link>
+            <Link className="hidden lg:inline-block lg:ml-auto lg:mr-3 y-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold rounded-xl transition duration-200" to="/login">Sign In</Link>
             <Link className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200" to="/signup">Sign up</Link>
           </>
         ) : (
-          <button className="hidden lg:inline-block py-2 px-6 bg-red-500 hover:bg-red-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={handleLogout}>Logout</button>
+          <button className="hidden lg:inline-block py-2 px-6 ml-auto bg-blue-500 hover:bg-red-600 text-sm text-white font-bold rounded-xl transition duration-200" onClick={handleLogout}>Logout</button>
         )}
       </nav>
       <div className="navbar-menu relative z-50 hidden">

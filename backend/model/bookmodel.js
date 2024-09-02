@@ -47,6 +47,10 @@ const bookSchema = new mongoose.Schema({
     publishyear: {
       type: String,
       required: true
+    },
+    message:{
+      type: String,
+      required: true
     }
   }, { timestamps: true });
   

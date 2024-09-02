@@ -9,6 +9,7 @@ const CreateBook = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [publishyear, setpublishyear] = useState(''); // Fixed variable name
+  const [message, setmessage] = useState(''); // Fixed variable name
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -20,11 +21,12 @@ const CreateBook = () => {
     const data = {
       title,
       author,
-      publishyear, // Fixed variable name
+      publishyear,
+      message // Fixed variable name
     };
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/books/addnotes',JSON.stringify({title,author,publishyear}), {
+      await axios.post('http://localhost:5000/books/addnotes',JSON.stringify({title,author,publishyear,message}), {
         headers: {
           "Authorization": ` ${token}`,
           "Content-Type": "application/json"
@@ -75,6 +77,15 @@ const CreateBook = () => {
               value={publishyear} // Fixed variable name
               onChange={(e) => setpublishyear(e.target.value)} // Fixed variable name
               className='border-2 border-blue-400 px-4 py-2 w-full'
+            />
+          </div>
+          <div className='my-2 '>
+            <label className='text-xl mr-2  text-gray-400'>message</label>
+            <input
+              type='text'
+              value={message} // Fixed variable name
+              onChange={(e) => setmessage(e.target.value)} // Fixed variable name
+              className='border-2 border-blue-400 h-32 px-4 py-2 w-full'
             />
           </div>
           <button

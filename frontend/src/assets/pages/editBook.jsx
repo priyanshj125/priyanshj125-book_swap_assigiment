@@ -12,6 +12,7 @@ const EditBook = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [publishyear, setPublishyear] = useState('');
+  const [message, setmessage] = useState('');
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -27,6 +28,7 @@ const EditBook = () => {
         setTitle(response.data.title);
         setAuthor(response.data.author);
         setPublishyear(response.data.publishyear);
+        setmessage(response.data.message);
         setLoading(false);
       })
       .catch((error) => {
@@ -41,6 +43,7 @@ const EditBook = () => {
         title,
         author,
         publishyear,
+        message
       };
       setLoading(true);
       axios
@@ -80,6 +83,11 @@ const EditBook = () => {
            <div className='my-4'>
             <label className='text-xl mr-4 text-gray-400'>publishyear</label>
             <input type='text' value={publishyear} onChange={(e)=>setPublishyear(e.target.value)} className='border-2 border-blue-400 px-4 py-2 w-full '>
+            </input> 
+           </div>
+           <div className='my-4'>
+            <label className='text-xl mr-4 text-gray-400'>message</label>
+            <input type='text' value={message} onChange={(e)=>setmessage(e.target.value)} className='border-2 border-blue-400 px-4 py-2 w-full '>
             </input> 
            </div>
            

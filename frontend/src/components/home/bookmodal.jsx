@@ -33,12 +33,7 @@ const Bookmodal = ({book,onClose}) =>  {
         </div>
         <p className='mt-4'>Anything You want to show</p>
         <p className='my-2'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni quia
-          voluptatum sint. Nisi impedit libero eveniet cum vitae qui expedita
-          necessitatibus assumenda laboriosam, facilis iste cumque a pariatur
-          nesciunt cupiditate voluptas? Quis atque earum voluptate dolor nisi
-          dolorum est? Deserunt placeat cumque quo dicta architecto, dolore
-          vitae voluptate sequi repellat!
+          {book.message}
         </p>
       </div>
     </div>
