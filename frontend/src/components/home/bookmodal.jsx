@@ -31,7 +31,7 @@ const Bookmodal = ({book,onClose}) =>  {
           <BiUserCircle className='text-red-300 text-2xl' />
           <h2 className='my-1'>{book.author}</h2>
         </div>
-        <p className='mt-4'>Anything You want to show</p>
+        <p className='mt-4'>contact email: {book.yemail}</p>
         <p className='my-2'>
           {book.message}
         </p>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { PiBookOpenTextLight } from 'react-icons/pi';
 import { BiUserCircle, BiShow } from 'react-icons/bi';
 import { BsInfoCircle } from 'react-icons/bs';
+import { AiOutlineMail } from 'react-icons/ai'; // Importing email icon
 import Bookmodal from './bookmodal.jsx';
 
 const BookSingleCard = ({ book }) => {
@@ -24,7 +25,7 @@ const BookSingleCard = ({ book }) => {
 
       {/* Book Details */}
       <div className='p-4'>
-        <h4 className='my-2 text-gray-500'>swap now</h4>
+        <h4 className='my-2 text-gray-500'>Swap Now</h4>
         <div className='flex justify-start items-center gap-x-2'>
           <PiBookOpenTextLight className='text-red-300 text-2xl' />
           <h2 className='my-1'>{book.title}</h2>
@@ -41,12 +42,10 @@ const BookSingleCard = ({ book }) => {
           <Link to={`/books/details/${book._id}`}>
             <BsInfoCircle className='text-2xl text-green-800 hover:text-black' />
           </Link>
-          {/* <Link to={`/books/edit/${book._id}`}>
-            <AiOutlineEdit className='text-2xl text-yellow-600 hover:text-black' />
-          </Link> */}
-          {/* <Link to={`/books/delete/${book._id}`}>
-            <MdOutlineDelete className='text-2xl text-red-600 hover:text-black' />
-          </Link> */}
+          {/* Email Icon */}
+          <a href={`mailto:${book.yemail}`}>
+            <AiOutlineMail className='text-2xl text-blue-600 hover:text-black cursor-pointer' />
+          </a>
         </div>
         {showModal && (
           <Bookmodal book={book} onClose={() => setShowModal(false)} />

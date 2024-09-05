@@ -31,6 +31,7 @@ const Navbar = () => {
           <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/yourbooks">YourBooks</Link></li>
           <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/pricing">Pricing</Link></li>
           <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/contact">Contact</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/chats">messagechats</Link></li>
         </ul>
         {!token ? (
           <>

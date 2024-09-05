@@ -59,13 +59,14 @@ router.post('/addnotes', fetchuser, [
   body('title').not().isEmpty().withMessage('Title is required'),
   body('author').not().isEmpty().withMessage('Author is required').isLength({ min: 2 }),
   body('publishyear').not().isEmpty().withMessage('Publish year is required'),
-  body('message').not().isEmpty().withMessage('message  is required')
+  body('message').not().isEmpty().withMessage('message  is required'),
+  body('yemail').not().isEmpty().withMessage('your email  is required')
 ], async (req, res) => {
   try {
     console.log("Request Body:", req.body);
     console.log("User:", req.user);
 
-    const { title, author, publishyear,message } = req.body;
+    const { title, author, publishyear,message,yemail } = req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -78,6 +79,7 @@ router.post('/addnotes', fetchuser, [
       author,
       publishyear,
       message,
+      yemail,
       user: req.user.id
     });
 
@@ -93,13 +95,15 @@ router.post('/addnotes', fetchuser, [
 
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
   try {
-    const { title, author, publishyear,message } = req.body;
+    const { title, author, publishyear,message,yemail } = req.body;
     // Create a newBook object
     const newBook = {};
     if (title) { newBook.title = title };
     if (author) { newBook.author = author };
     if (publishyear) { newBook.publishyear = publishyear };
     if (message) { newBook.message = message };
+    if (yemail) { newBook.yemail = yemail };
+
 
     // Find the note to be updated and update it
     let book = await Book.findById(req.params.id);
@@ -125,7 +129,8 @@ router.put ('/:id', async (req, res) => {
      !req.body.title ||
      !req.body.publishyear ||
      !req.body.author||
-     !req.body.message
+     !req.body.message||
+     !req.body.yemail
      ){
         return res.status(400).send({
           message:"send all req detail" 

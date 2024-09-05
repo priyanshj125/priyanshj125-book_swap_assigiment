@@ -15,10 +15,14 @@ const Pricing = () => {
               <li className="mb-2">interting user</li>
               <li className="mb-2">fast exchange algo use</li>
               <li className="mb-2">Email Support</li>
+              <br/>
             </ul>
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-              Get Started
-            </button>
+            <button
+  className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+  onClick={() => alert('Functionality not applied yet')}
+>
+  Get Started
+</button>
           </div>
 
           {/* Pricing Card 2 */}
@@ -31,9 +35,12 @@ const Pricing = () => {
               <li className="mb-2">fast exchange algo use</li>
               <li className="mb-2">Priority Support</li>
             </ul>
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
-              Get Started
-            </button>
+            <button
+  className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+  onClick={() => alert('Functionality not applied yet')}
+>
+  Get Started
+</button>
           </div>
 
           {/* Pricing Card 3 */}

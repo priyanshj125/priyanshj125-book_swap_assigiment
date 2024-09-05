@@ -10,6 +10,8 @@ const CreateBook = () => {
   const [author, setAuthor] = useState('');
   const [publishyear, setpublishyear] = useState(''); // Fixed variable name
   const [message, setmessage] = useState(''); // Fixed variable name
+  const [yemail, setyemail] = useState('');
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -23,10 +25,11 @@ const CreateBook = () => {
       author,
       publishyear,
       message // Fixed variable name
+      ,yemail
     };
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/books/addnotes',JSON.stringify({title,author,publishyear,message}), {
+      await axios.post('http://localhost:5000/books/addnotes',JSON.stringify({title,author,publishyear,message,yemail}), {
         headers: {
           "Authorization": ` ${token}`,
           "Content-Type": "application/json"
@@ -79,6 +82,16 @@ const CreateBook = () => {
               className='border-2 border-blue-400 px-4 py-2 w-full'
             />
           </div>
+          <div className='my-4'>
+            <label className='text-xl mr-4 text-gray-400'>contact Email</label>
+            <input
+              type='text'
+              value={yemail} // Fixed variable name
+              onChange={(e) => setyemail(e.target.value)} // Fixed variable name
+              className='border-2 border-blue-400 px-4 py-2 w-full'
+            />
+          </div>
+
           <div className='my-2 '>
             <label className='text-xl mr-2  text-gray-400'>message</label>
             <input

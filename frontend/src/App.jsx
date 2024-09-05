@@ -13,6 +13,7 @@ import Signup from './components/signup.jsx';
 import About from './assets/pages/about.jsx';
 import Contact from './assets/pages/contact.jsx';
 import Pricing from './assets/pages/pricing.jsx';
+import Chats from './assets/pages/chats.jsx';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
         <Route path='/about' element={<About/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/pricing' element={<Pricing/>} />
+        <Route path='/chats' element={<Chats/>} />
       </Routes>
     </>
   );
