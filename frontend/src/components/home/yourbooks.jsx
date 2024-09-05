@@ -51,18 +51,7 @@ const Yourbooks = () => {
     return (
         <div className='p-4'>
             <div className='flex justify-center items-center gap-x-4 mb-4'>
-                <button
-                    className={`px-4 py-1 rounded-lg ${showType === 'table' ? 'bg-blue-500 text-white' : 'bg-sky-300 hover:bg-sky-500'}`}
-                    onClick={() => setShowType('table')}
-                >
-                    Table
-                </button>
-                <button
-                    className={`px-4 py-1 rounded-lg ${showType === 'card' ? 'bg-blue-500 text-white' : 'bg-sky-300 hover:bg-sky-500'}`}
-                    onClick={() => setShowType('card')}
-                >
-                    Card
-                </button>
+               
             </div>
             <div className='flex justify-between items-center mb-4'>
                 <h1 className='text-3xl my-8'>Your Books</h1>
