@@ -50,7 +50,7 @@ const EditBook = () => {
       };
       setLoading(true);
       axios
-        .put(`http://3.109.211.149:5000/books/${id}`, data)
+        .put(`http://15.207.54.42:5000/books/${id}`, data)
         .then(() => {
           setLoading(false);
           enqueueSnackbar('Book Created successfully', { variant: 'success' });
