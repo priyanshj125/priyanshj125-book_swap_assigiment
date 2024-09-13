@@ -16,6 +16,14 @@ import Pricing from './assets/pages/pricing.jsx';
 import Chats from './assets/pages/chats.jsx';
 
 const App = () => {
+  const showalert = (message, type) => {
+    // Logic to show an alert message
+    console.log(`${type}: ${message}`);
+  };
+  
+  // Render the Signup component with showalert prop
+  <Signup showalert={showalert} />
+  
   return (
     <>
       {/* Place Navbar outside of Routes */}

@@ -1,70 +1,70 @@
-import React from 'react'
-import { useEffect,useState } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import ButtonBlack from '../../components/ButtonBlack.jsx'
-// import Loading from './component/los/loading'
-import Loading from '../../components/loading.jsx'
-import { Book } from '../../../../backend/model/bookmodel.js'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import ButtonBlack from '../../components/ButtonBlack';
+import Loading from '../../components/loading';
 
- 
 const ShowBook = () => {
-  const [book,setBooks] = useState({}) ;
-  const [loading,setloading] = useState(false)
-  const {id}=useParams();
+  const [book, setBooks] = useState({});
+  const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+
   useEffect(() => {
-    setloading(true);
+    setLoading(true);
     axios
       .get(`http://15.207.54.42:5000/books/${id}`)
       .then((response) => {
         setBooks(response.data);
-        setloading(false);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        setloading(false);
+        setLoading(false);
       });
-  }, []);
+  }, [id]);
+
   return (
-    <div className='p-4'>
+    <div className="p-6 flex flex-col items-center bg-gray-50 min-h-screen">
       <ButtonBlack />
-      <h1 className='text-3xl my-4'>showbook</h1>
-      {loading? (<Loading/>): (
-        <div className='flex flex-col gap-4 border-2 border-sky-400 rounded-xl w-fit p-4'>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>ID</span>
-          <span>{book._id}</span>
+      <h1 className="text-4xl font-bold my-6 text-center">Book Details</h1>
+
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="flex flex-col gap-4 border-2 border-blue-300 shadow-lg rounded-xl w-full max-w-lg p-6 bg-white">
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">ID:</span>
+            <span className="ml-4 text-gray-800">{book._id}</span>
           </div>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>Title</span>
-          <span>{book. title}</span>
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">Title:</span>
+            <span className="ml-4 text-gray-800">{book.title}</span>
           </div>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>author</span>
-          <span>{book.author}</span>
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">Author:</span>
+            <span className="ml-4 text-gray-800">{book.author}</span>
           </div>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>publishyear</span>
-          <span>{book.publishyear  }</span>
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">Published Year:</span>
+            <span className="ml-4 text-gray-800">{book.publishyear}</span>
           </div>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>time</span>
-          <span>{new Date(book.createdAt).toString( )}</span>
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">Created At:</span>
+            <span className="ml-4 text-gray-800">{new Date(book.createdAt).toLocaleDateString()}</span>
           </div>
-          <div className='my-4'>
-          <span className='text-x1 mr-4 text-gray-500'>last update</span>
-          <span>{new Date(book.updateAt).toString() }</span>
+          <div className="my-4">
+            <span className="text-lg font-semibold text-gray-600">Last Update:</span>
+            <span className="ml-4 text-gray-800">{new Date(book.updatedAt).toLocaleDateString()}</span>
           </div>
 
+          {/* Action Buttons */}
+          <div className="flex justify-between mt-6">
+            
           </div>
-
-          
-          )
-          }
-
-      
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default ShowBook;
