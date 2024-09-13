@@ -5,7 +5,7 @@ const Pricing = () => {
   const togglePricing = () => setIsYearly(!isYearly);
 
   return (
-    <div className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 py-20">
+    <div className="bg-gradient-to-r from-gray-700 via-gray-300 to-gray-900 py-20">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-5xl font-extrabold text-white text-center mb-12">Choose Your Perfect Plan</h1>
 

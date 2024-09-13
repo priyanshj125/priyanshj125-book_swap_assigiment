@@ -1,47 +1,48 @@
-import React from 'react'
-import { useState,useEffect} from 'react'
-import axios from 'axios'
-import Loading from '../../components/loading'
-import { Link } from 'react-router-dom'
-import { AiOutlineEdit } from 'react-icons/ai';
-import { BsInfoCircle } from 'react-icons/bs';
-import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md'; 
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Loading from '../../components/loading';
+import { Link } from 'react-router-dom';
+import { MdOutlineAddBox } from 'react-icons/md'; 
 import Booktable from '../../components/home/booktable';
 import Card from '../../components/home/card';
+
 const Home = () => {
-  const [books, setBooks] = useState([]) 
-  const [loading,setloading] = useState(false)
-  const [ShowType,setShowType] = useState('table') 
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showType, setShowType] = useState('table'); 
+
   useEffect(() => {
-    setloading(true)
+    setLoading(true);
     axios.get('http://15.207.54.42:5000/books')
-   .then((response) => { 
-    setloading(false)
-    setBooks(response.data.data) 
-   }).catch((error) => {
-    console.log(error );
-    setloading(false);
-   });
-  },[]);
+      .then((response) => { 
+        setLoading(false);
+        setBooks(response.data.data); 
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <div className='p-4'>
-       <div className='flex justify-center items-center gap-x-4'>   
-    
+    <div className='bg-gray-50 min-h-screen p-6'>
+      <div className='container mx-auto'>
+        <div className='flex justify-between items-center mb-8'>
+          <h1 className='text-4xl font-extrabold text-gray-800'>All Books List</h1>
+          <Link to='/books/create' className='bg-blue-600 text-white p-2 rounded-lg shadow-md hover:bg-blue-700 transition'>
+            <MdOutlineAddBox size='30' />
+          </Link>
+        </div>
+        {loading ? (
+          <Loading />
+        ) : showType === 'table' ? (
+          <Card books={books} />
+        ) : (
+          <Booktable books={books} />
+        )}
       </div>
-      <div className='flex justify-between item-center'>
-         <h1 className='text-3xl my-8'>all book list</h1>
-         <Link to='/books/create'>
-            <MdOutlineAddBox size='30' className='test-sky-800 text-4xl' color='blue' />
-         </Link> 
-
-      </div>
-      {loading ?(<Loading/>) : ShowType === 'table' ? (
-        <Card books={books} />
-      ) : (
-        <Booktable books={books} />
-      )}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

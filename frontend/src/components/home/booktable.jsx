@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BsInfoCircle } from 'react-icons/bs';
-import { MdOutlineDelete } from 'react-icons/md'; 
+import { MdOutlineDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 const Booktable = ({ books }) => {
@@ -10,40 +10,54 @@ const Booktable = ({ books }) => {
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
-      navigate('/login');     
+      navigate('/login');
     }
   }, [navigate]);
 
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      // Handle delete functionality here
+      console.log(`Book with ID ${id} will be deleted.`);
+    }
+  };
+
   return (
-    <div className="overflow-x-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="overflow-x-auto p-6 bg-gray-50 shadow-lg rounded-lg">
       <table className="min-w-full table-auto border-collapse text-left">
-        <thead className="bg-pink-300 text-balck">
+        <thead className="bg-gray-800 text-white">
           <tr>
-            <th className="p-4 border border-black-600 rounded-tl-lg">No</th>
-            <th className="p-4 border border-white-600">Title</th>
-            <th className="p-4 border border-blue-600">Author</th>
-            <th className="p-4 border border-blue-600">Publish Year</th>
-            <th className="p-4 border border-blue-600 rounded-tr-lg">Operations</th>
+            <th className="p-4 border-b border-gray-600">No</th>
+            <th className="p-4 border-b border-gray-600">Title</th>
+            <th className="p-4 border-b border-gray-600">Author</th>
+            <th className="p-4 border-b border-gray-600">Publish Year</th>
+            <th className="p-4 border-b border-gray-600">Operations</th>
           </tr>
         </thead>
         <tbody>
           {books.map((book, index) => (
-            <tr key={book._id} className="hover:bg-blue-100 transition duration-300">
-              <td className="p-4 border border-slate-300 text-center">{index + 1}</td>
-              <td className="p-4 border border-slate-300">{book.title}</td>
-              <td className="p-4 border border-slate-300">{book.author}</td>
-              <td className="p-4 border border-slate-300 text-center">{book.publishyear}</td>
-              <td className="p-4 border border-slate-300">
+            <tr
+              key={book._id}
+              className="hover:bg-gray-200 transition duration-300"
+            >
+              <td className="p-4 border-b border-gray-300 text-center">{index + 1}</td>
+              <td className="p-4 border-b border-gray-300">{book.title}</td>
+              <td className="p-4 border-b border-gray-300">{book.author}</td>
+              <td className="p-4 border-b border-gray-300 text-center">{book.publishyear}</td>
+              <td className="p-4 border-b border-gray-300">
                 <div className="flex justify-center gap-4">
-                  <Link to={`/books/details/${book._id}`} className="text-sky-700 hover:text-sky-500">
-                    <BsInfoCircle size="25" />
+                  <Link to={`/books/details/${book._id}`} className="text-blue-600 hover:text-blue-400" title="View Details">
+                    <BsInfoCircle size="20" />
                   </Link>
-                  <Link to={`/books/edit/${book._id}`} className="text-red-500 hover:text-red-300">
-                    <AiOutlineEdit size="25" />
+                  <Link to={`/books/edit/${book._id}`} className="text-yellow-500 hover:text-yellow-300" title="Edit Book">
+                    <AiOutlineEdit size="20" />
                   </Link>
-                  <Link to={`/books/delete/${book._id}`} className="text-pink-400 hover:text-pink-600">
-                    <MdOutlineDelete size="25" />
-                  </Link>
+                  <button
+                    onClick={() => handleDelete(book._id)}
+                    className="text-red-600 hover:text-red-400"
+                    title="Delete Book"
+                  >
+                    <MdOutlineDelete size="20" />
+                  </button>
                 </div>
               </td>
             </tr>
