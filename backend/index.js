@@ -8,6 +8,7 @@ import connectDb from './db.js';
 import authrouter from './routes/auth.js';
 import nodemailer from 'nodemailer';
 
+
 const app = express(); 
 
 app.use(express.json());
