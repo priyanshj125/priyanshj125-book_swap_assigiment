@@ -34,12 +34,14 @@ router.post('/createuser', [
         const user = await User.create({
             name: req.body.name,
             password: secPass,
-            email: req.body.email
+            email: req.body.email,
+            plan: 'free'
         });
         const data = {
             id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            plan: user.plan
         };
         // console.log(data);
         const authtoken = jwt.sign(data,JWT_SECRET,{ algorithm: 'HS384' });
@@ -77,7 +79,8 @@ router.post('/login', [
 
         const data = {
             user: {
-                id: user._id
+                id: user._id,
+                plan:user.plan
             }
         };
 

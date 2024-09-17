@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { jwtDecode } from "jwt-decode";
 
 const Pricing = () => {
   const [isYearly, setIsYearly] = useState(false);
+  const [userPlan, setUserPlan] = useState(null);
+
   const togglePricing = () => setIsYearly(!isYearly);
+
+  useEffect(() => {
+    // Assuming the token is stored in local storage
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log(decoded);
+        setUserPlan(decoded.user.plan); // Extract the plan from the token
+      } catch (error) {
+        console.error("Invalid token:", error);
+      }
+    }
+  }, []);
 
   return (
     <div className="bg-gradient-to-r from-gray-700 via-gray-300 to-gray-900 py-20">
       <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-5xl font-extrabold text-white text-center mb-12">Choose Your Perfect Plan</h1>
+      <h1 className="text-5xl font-extrabold text-white text-center mb-12">Choose Your Perfect Plan</h1>
+
+        {/* Display User's Plan */}
+        {userPlan && (
+          <p className="text-center text-white mb-10">
+            You are currently on the <span className="font-bold">{userPlan}</span> plan.
+          </p>
+        )}
 
         {/* Toggle Pricing Button */}
         <div className="text-center mb-10">
@@ -39,14 +64,14 @@ const Pricing = () => {
               </li>
               <li className="flex items-center mb-3">
                 <span className="mr-2 text-blue-500">✔</span> Email Support
-              </li>
+              </li><br/>
             </ul>
             <button
-              className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300"
-              onClick={() => alert('Basic Plan Selected')}
-            >
-              Get Started
-            </button>
+  className={`w-full py-3 rounded-lg transition duration-300 ${userPlan === 'basic' ? 'bg-green-200 text-white cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+  disabled={userPlan === 'basic'}
+>
+  {userPlan === 'basic' ? 'Enrolled' : 'Click to Get Basic'}
+</button>
           </div>
 
           {/* Pricing Card 2 */}
@@ -71,11 +96,11 @@ const Pricing = () => {
               </li>
             </ul>
             <button
-              className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300"
-              onClick={() => alert('Standard Plan Selected')}
-            >
-              Get Started
-            </button>
+  className={`w-full py-3 rounded-lg transition duration-300 ${userPlan === 'advance' ? 'bg-green-200 text-white cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+  disabled={userPlan === 'advance'}
+>
+  {userPlan === 'advance' ? 'Enrolled' : 'Click to Get advance'}
+</button>
           </div>
         </div>
 

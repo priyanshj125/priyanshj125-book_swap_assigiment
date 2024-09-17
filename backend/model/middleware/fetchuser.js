@@ -15,12 +15,15 @@ const fetchuser = (req, res, next) => {
    
 
       const data =jwt.verify(token,JWT_SECRET,{ algorithm: 'HS384' });
+      console.log(data);
       const id=data.id;
+      const plan=data.plan;
 
       req.user = data.user;
       console.log(data);
       req.user = {
-        id: data.user.id,         // Extract the user ID from the payload
+        id: data.user.id,
+        plan:data.user.plan         // Extract the user ID from the payload
        
     };
       next();

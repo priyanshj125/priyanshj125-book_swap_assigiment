@@ -29,7 +29,7 @@ const CreateBook = () => {
     };
     setLoading(true);
     try {
-      await axios.post('http://15.207.54.42:5000/books/addnotes',JSON.stringify({title,author,publishyear,message,yemail}), {
+      await axios.post('http://localhost:5000/books/addnotes',JSON.stringify({title,author,publishyear,message,yemail}), {
         headers: {
           "Authorization": ` ${token}`,
           "Content-Type": "application/json"

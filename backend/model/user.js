@@ -14,6 +14,11 @@ const Userschema = new Schema({
     password:{
         type:String,
         requird :true
+    },  
+    plan: {
+        type: String,
+        enum: ['free', 'basic', 'advanced'], 
+        default: 'free' 
     }
 });
 const User = mongoose.model('user',Userschema);
