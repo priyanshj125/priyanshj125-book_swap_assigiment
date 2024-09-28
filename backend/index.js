@@ -3,6 +3,7 @@ import { PORT, mongoDBURL } from './config.js';
 import mongoose from 'mongoose';
 import { Book } from './model/bookmodel.js';
 import router from './routes/bookroutes.js';
+import chatRouter from './routes/chatRoutes.js';
 import cors from 'cors';
 import connectDb from './db.js';
 import authrouter from './routes/auth.js';
@@ -32,6 +33,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+
+// app.get('/api/chat/:id', (req,res) => {
+//   console.log("chat by id"+req.params.id+"ffffff");
+
+// });
+
+
+// app.get('/api/chat', (req,res) => {
+//   console.log("chat");
+// });
 // Contact form route
 app.post('/send-email', (req, res) => {
   const { name, email, message } = req.body;
@@ -52,13 +64,14 @@ app.post('/send-email', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
+app.get('/', (req,res) => {
     return res.status(404).send("book exchange");
 });
 
 app.use('/books', router);
 app.use('/api/auth', authrouter);
-
+app.use('/api/chat', chatRouter);
+ 
 connectDb().then(() => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);

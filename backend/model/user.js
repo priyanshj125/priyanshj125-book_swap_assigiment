@@ -15,6 +15,12 @@ const Userschema = new Schema({
         type:String,
         requird :true
     },  
+    pic: {
+        type: "String",
+        required: true,
+        default:
+          "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+     },
     plan: {
         type: String,
         enum: ['free', 'basic', 'advanced'], 

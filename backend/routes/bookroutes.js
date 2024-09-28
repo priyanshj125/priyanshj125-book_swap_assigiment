@@ -38,6 +38,7 @@ router.get('/fetch', fetchuser, async (req, res) => {
      books = await Book.find({ user: req.user.id  });
   }
     res.json(books);
+    console.log("fetch book api call success");
   } catch (error) {
     res.status(400).send({ error: "servies problem part 3 dume 401" })
     console.log(error)

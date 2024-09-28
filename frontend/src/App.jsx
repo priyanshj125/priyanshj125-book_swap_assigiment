@@ -46,6 +46,7 @@ const App = () => {
         <Route path='/chats' element={<Chats/>} />
       </Routes>
     </>
+
   );
 }
 

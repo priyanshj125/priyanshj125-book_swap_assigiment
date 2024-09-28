@@ -1,45 +1,50 @@
 import React, { useState } from 'react'
-
 import { json } from 'react-router-dom';
 import { useNavigate} from'react-router-dom';
 
 function Signup(props) {
   const Host= "http://localhost:5000/"
   let history = useNavigate();
+  const [image, setImage] = useState(null);
 
   const onChange = (e) => {
     setcradensital({...cradensital,[e.target.name]: e.target.value });
     }
-  const [cradensital,setcradensital] = useState({email:"",password:"",cpassword:"",name:""});
+
+    const onImageChange = (event) => {
+      const selectedFile = event.target.files[0];
+      if (selectedFile && selectedFile.type.startsWith('')) {
+        setImage(selectedFile);
+        setErrorMessage(null); // Clear previous error message
+        setCredentials({
+          ...credentials,
+          pic: selectedFile
+        }); // Update the pic field in credentials state
+      } else {
+        setErrorMessage('Please select a valid image file (JPEG, PNG, etc.).');
+      }
+    };
+
+  const [cradensital,setcradensital] = useState({email:"",password:"",cpassword:"",name:"",pic:"https:aaaaaaaaaa//icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"});
    const handlesumit = async(e) => {
     e.preventDefault();
-    // props.login(e.target.email.value,e.target.password.value)
-  
-    // const response = await fetch(`${Host}/api/auth/createuser`, {
       const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
       method: "POST",  
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({name:cradensital.name,email:cradensital.email,password:cradensital.password}), 
+      body: JSON.stringify({name:cradensital.name,email:cradensital.email,password:cradensital.password,pic:cradensital.pic}), 
     });
-    // props.setProgress(10)
 
     const json = await response.json();
-    // props.setProgress(30)
 
     console.log(json);
     if (json.success) {
       localStorage.setItem('token',json.authtoken);
-      // props.setProgress(60)
 
-      history("/login");
-      // props.setProgress(100)
+      history("/home");
 
-      props.showalert("successfuly crerate account","success")
   }else{
-    // alert(json.message) 
-    props.showalert("email already in use","danger");
     history("/Signup")
   }
 }
@@ -70,6 +75,22 @@ function Signup(props) {
             <input type='text'  name='cpassword' value={cradensital.cpassword} onChange={onChange} id="cPassword" className='border-2 rounded-md  border-blue-400 px-4  py-2 w-full '>
             </input>
            </div>
+           {/* <div className='my-1' id="pic">
+            <label htmlFor="profilePic" className='text-xl rounded-md text-gray-400'>Profile Picture</label>
+            <input type='file' name='profilePic'  value={cradensital.pic} onChange={onChange}  id="profilePic" className='border-2 rounded-md border-blue-400 px-4 py-2 w-full' accept="image/*" />
+          </div> */}
+            <div className='my-1' id="pic">
+              <label htmlFor="profilePic" className='text-xl text-gray-400'>Profile Picture</label>
+              <input 
+                type='file' 
+                name='profilePic' 
+                onChange={onImageChange} 
+                id="profilePic" 
+                className='border-2 rounded-md border-blue-400 px-4 py-2 w-full' 
+                accept="image/*"
+                // value={cradensital.pic}
+              />
+            </div>
            <button type="submit" className="btn btn-primary" >sign up</button>
 
 

@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <div>
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <h1 class='text-3xl font-extralight text-black-600 tracking-tight'>swapnow</h1>
+        <h1 className='text-3xl font-extralight text-black-600 tracking-tight'>swapnow</h1>
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
           <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/home">Home</Link></li>
           <li className="text-gray-300">

@@ -21,9 +21,12 @@ const Login = (props) => {
       // props.setProgress(50)
 
       const json = await response.json();
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
         console.log(json);
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaa");
         if (json.success) {
           localStorage.setItem('token',json.authtoken);
+          localStorage.setItem("userInfo", JSON.stringify(json.data));
           history("/home");
           // props.setProgress(100)
 

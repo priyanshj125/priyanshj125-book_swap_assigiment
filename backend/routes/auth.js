@@ -14,7 +14,8 @@ const JWT_SECRET = 'priyansh123';
 router.post('/createuser', [
     body('name').not().isEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Email is not valid'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('pic').optional()
 ], async (req, res) => {
     let success = false;
 
@@ -35,15 +36,16 @@ router.post('/createuser', [
             name: req.body.name,
             password: secPass,
             email: req.body.email,
-            plan: 'free'
+            plan: 'free',
+            pic: req.body.pic
         });
         const data = {
             id: user._id,
             name: user.name,
             email: user.email,
-            plan: user.plan
+            plan: user.plan,
+            pic: user.pic  
         };
-        // console.log(data);
         const authtoken = jwt.sign(data,JWT_SECRET,{ algorithm: 'HS384' });
         const zzzz =jwt.verify(authtoken,JWT_SECRET);
         // console.log(zzzz);
@@ -80,20 +82,27 @@ router.post('/login', [
         const data = {
             user: {
                 id: user._id,
-                plan:user.plan
+                plan:user.plan, 
+                //  _id: user._id,
+                name: user.name,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                pic: user.pic,
+                // token: generateToken(user._id),
             }
         };
 
         const authtoken = jwt.sign(data ,JWT_SECRET);
         success = true;
-        res.json({ success, authtoken });
+        console.log( {success, authtoken,data});
+        res.json({ success, authtoken,data});
     } catch (e) {
         console.error(e.message);
         res.status(500).send('Internal Server Error');
     }
 });
 
-router.post('/getuser', fetchuser, async (req, res) => {
+router.post('/getuser', async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select('-password');
@@ -103,5 +112,20 @@ router.post('/getuser', fetchuser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+ //  /api/auth/alluser?search=priyansh
+
+ router.get('/alluser',fetchuser,async (req, res) => {//+
+          const keyword = req.query.search?{//+
+          $or: [
+                    { name: { $regex: req.query.search, $options: 'i' } },
+                    { email: { $regex: req.query.search, $options: 'i' } }
+                ]
+       }: {}
+       const users =await (await User.find(keyword && { _id: { $ne: req.user._id } }))
+       console.log("alluser api call success");
+       res.send(users)
+//    console.log(keyword); 
+ });
+
 
 export default router;
