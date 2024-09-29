@@ -42,8 +42,15 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
   export const getSender = (loggedUser, users) => {
     if (users && users.length > 0) {
       return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
-      console.log(users[0]._id + " is alreadyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      // return  users._id == loggedUser.user.id ? loggedUser.name : users.name;
+      // console.log(users[1] + " is alreadyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      // console.log(JSON.stringify(users));
     } else {
+      console.log(JSON.stringify(users._id));
+      console.log("aaaaaa");
+      console.log(JSON.stringify(loggedUser.user.id));
+      console.log("aaaaaa");
+
       console.log("Users array is empty or undefined");
     }
     

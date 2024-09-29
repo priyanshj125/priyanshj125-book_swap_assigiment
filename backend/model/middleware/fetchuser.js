@@ -5,7 +5,7 @@ const JWT_SECRET = 'priyansh123';
 const fetchuser = (req, res, next) => {
     // Get the token from the header
     const token = req.header('Authorization');
-    console.log(token+"    fetchuseu have this token");
+    // console.log(token+"    fetchuseu have this token");
   
     if (!token) {
       return res.status(401).json({ error: "Invalid token, please provide a valid one" });
@@ -20,8 +20,8 @@ const fetchuser = (req, res, next) => {
       const plan=data.plan;
 
       req.user = data.user;
-      console.log(data);
-      console.log(data.user.id);
+      // console.log(data);
+      // console.log(data.user.id);
       req.user = {
         id: data.user.id,
         plan:data.user.plan         // Extract the user ID from the payload

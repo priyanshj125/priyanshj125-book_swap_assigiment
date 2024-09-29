@@ -8,46 +8,53 @@ import cors from 'cors';
 import connectDb from './db.js';
 import authrouter from './routes/auth.js';
 import nodemailer from 'nodemailer';
+import http from 'http';
+import { Server } from 'socket.io';
 
-
-const app = express(); 
+const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: '*',
-    methods: ["POST", "GET", "DELETE", "PUT"],
-    credentials: true
+  origin: ['http://localhost:5000', 'http://localhost:5173', 'http://localhost:3000'],
+  methods: ["POST", "GET", "DELETE", "PUT"],
+  credentials: true,
 }));
 
-// Allow requests from specific frontend domains
-app.use(cors({
-  origin: ['http://localhost:5000', 'http://localhost:5173'], // Add all allowed origins here
-}));
-
-// Email configuration
-const transporter = nodemailer.createTransport({
-  service: 'Gmail', // my details add laTER
-  auth: {
-    user: ' ', // my email
-    pass: '', 
+const server = http.createServer(app);
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
   },
 });
 
+io.on("connection", (socket) => {
+  console.log("Connected to socket.io");
 
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    socket.emit("connected");
+    
+    socket.on("disconnect", () => {
+      console.log("USER DISCONNECTED");
+      socket.leave(userData._id);
+    });
+  });
 
-// app.get('/api/chat/:id', (req,res) => {
-//   console.log("chat by id"+req.params.id+"ffffff");
+  // Other socket event handlers...
+});
 
-// });
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Use environment variables
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-
-// app.get('/api/chat', (req,res) => {
-//   console.log("chat");
-// });
 // Contact form route
 app.post('/send-email', (req, res) => {
   const { name, email, message } = req.body;
-
   const mailOptions = {
     from: email,
     to: 'priyanshjain8491@gmail.com',
@@ -64,18 +71,18 @@ app.post('/send-email', (req, res) => {
   });
 });
 
-app.get('/', (req,res) => {
-    return res.status(404).send("book exchange");
+app.get('/', (req, res) => {
+  return res.status(404).send("book exchange");
 });
 
 app.use('/books', router);
 app.use('/api/auth', authrouter);
 app.use('/api/chat', chatRouter);
- 
+
 connectDb().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }).catch((err) => {
-    console.error("index.js error:", err);
+  console.error("index.js error:", err);
 });

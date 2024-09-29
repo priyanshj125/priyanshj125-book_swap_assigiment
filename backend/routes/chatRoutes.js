@@ -3,6 +3,8 @@ import User from '../model/user.js';
 import asyncHandler from 'express-async-handler'; 
 import fetchuser from '../model/middleware/fetchuser.js';
 import Chat from '../model/chatmodel.js';
+import Message from "../model/messagemodel.js";
+
 
 const router = express.Router();
 
@@ -230,12 +232,67 @@ router.put('/addusertogroup',fetchuser,asyncHandler(async(req, res) => {
 }))
 
 
+// message api are here 
+router.get('/allMessages/:chatId', fetchuser, asyncHandler(async (req, res) => {
+  try {
+    // Use req.params.chatId directly to find the messages related to the given chat
+    const messages = await Message.find({ chat: req.params.chatId })
+      .populate("sender", "name pic email")
+      .populate("chat");
+      
+    // Send the retrieved messages in the response
+    res.json(messages);
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).send({ message: error.message });
+  }
+}));
 
 
 
+router.post('/sendmessage', fetchuser, asyncHandler(async (req, res) => {
+  try {
+    console.log("ccccccccccccccccccccc");  // Initial log to indicate the route is hit
+    const { content, chatId } = req.body;
+    console.log("aaaaaaaaaaaaaaa");  // Log to indicate the logic is proceeding further
 
+    // Check if the required fields are present
+    if (!content || !chatId) {
+      console.log("Invalid data passed into request");
+      return res.sendStatus(400);
+    }
 
+    // Create a new message object
+    var newMessage = {
+      sender: req.user.id,  // Assuming `req.user` is populated by `fetchuser`
+      content: content,
+      chat: chatId,
+    };
 
+    try {
+      // Save the new message to the database
+      var message = await Message.create(newMessage);
 
+      // Populate relevant fields for the response
+      message = await message.populate("sender", "name pic")
+      message = await message.populate("chat")
+      message = await User.populate(message, {
+        path: "chat.users",
+        select: "name pic email",
+      });
+
+      // Update the chat's latest message
+      await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
+
+      res.json(message);  // Return the saved message
+    } catch (error) {
+      res.status(400);
+      throw new Error(error.message);
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}));
 
 export default router;
