@@ -1,6 +1,5 @@
 export const isSameSenderMargin = (messages, m, i, userId) => {
     // console.log(i === messages.length - 1);
-    console.log(user+" isSameSenderMarginaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   
     if (
       i < messages.length - 1 &&
@@ -53,10 +52,10 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
 
       console.log("Users array is empty or undefined");
     }
-    
 
     return true
   };
+  
   
   export const getSenderFull = (loggedUser, users) => {
     return users[0]._id === loggedUser._id ? users[1] : users[0];

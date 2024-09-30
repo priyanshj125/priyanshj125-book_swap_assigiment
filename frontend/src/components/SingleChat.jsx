@@ -27,6 +27,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
+  const token = localStorage.getItem("token");
 
   const defaultOptions = {
     loop: true,
@@ -45,7 +46,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
 
@@ -58,11 +59,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         },
       }
       );
+      console.log("singlechat1");
+      console.log(data);
+      console.log("singlechat2");
       setMessages(data);
       setLoading(false);
 
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error Occured!",
         description: "Failed to Load the Messages",
@@ -81,7 +86,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         };
         setNewMessage("");

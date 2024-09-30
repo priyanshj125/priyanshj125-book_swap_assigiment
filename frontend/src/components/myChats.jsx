@@ -36,9 +36,12 @@ const MyChats = ({ fetchAgain }) => {
       },
     });
       setChats(data);
+      console.log("/mychat data loaded");
+      console.log(data);
 
-      // console.log(data);
     } catch (error) {
+      console.error(error);
+      console.log(error);
       toast({
         title: "Error Occured!",
         description: "Failed to Load the chats",
