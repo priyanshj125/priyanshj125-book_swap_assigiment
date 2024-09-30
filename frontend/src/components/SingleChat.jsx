@@ -1,4 +1,3 @@
-
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
@@ -16,7 +15,7 @@ import animationData from "../animations/typing.json";
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../components/context/contextProvider";
-const ENDPOINT = "http://localhost:5000"; // 
+const ENDPOINT = "http://localhost:5000"; 
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -37,8 +36,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
+
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
+
+  // Extract userInfo from local storage
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (selectedChat && userInfo && userInfo.user) {
+      // Append userInfo.user to selectedChat.users array if not already present
+      if (!selectedChat.users.some((u) => u.id === userInfo.user.id)) {
+        selectedChat.users = [...selectedChat.users, userInfo.user];
+        setSelectedChat({ ...selectedChat }); // Trigger re-render with updated users
+      }
+    }
+  }, [selectedChat]);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -54,10 +67,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       const { data } = await axios.get(
         `http://www.localhost:5000/api/chat/allMessages/${selectedChat._id}`,
-        {   headers: {
-          "Authorization": token
-        },
-      }
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       console.log("singlechat1");
       console.log(data);
@@ -96,10 +110,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             content: newMessage,
             chatId: selectedChat,
           },
-          {   headers: {
-            "Authorization": token
-          },
-        }
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
         );
         socket.emit("new message", data);
         setMessages([...messages, data]);
@@ -122,20 +137,17 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     fetchMessages();
-
     selectedChatCompare = selectedChat;
-    // eslint-disable-next-line
   }, [selectedChat]);
 
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
-        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        !selectedChatCompare || 
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
         if (!notification.includes(newMessageRecieved)) {
@@ -261,7 +273,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </>
       ) : (
-        // to get socket.io on same page
         <Box display="flex" alignItems="center" justifyContent="center" h="100%">
           <Text fontSize="3xl" pb={3} fontFamily="Work sans">
             Click on a user to start chatting
