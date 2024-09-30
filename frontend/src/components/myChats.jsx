@@ -40,6 +40,7 @@ const MyChats = ({ fetchAgain }) => {
       console.log(data);
 
     } catch (error) {
+      console.log(token);
       console.error(error);
       console.log(error);
       toast({
