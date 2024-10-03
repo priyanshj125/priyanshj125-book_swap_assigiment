@@ -40,18 +40,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
-  // Extract userInfo from local storage
-  useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    if (selectedChat && userInfo && userInfo.user) {
-      // Append userInfo.user to selectedChat.users array if not already present
-      if (!selectedChat.users.some((u) => u.id === userInfo.user.id)) {
-        selectedChat.users = [...selectedChat.users, userInfo.user];
-        setSelectedChat({ ...selectedChat }); // Trigger re-render with updated users
-      }
-    }
-  }, [selectedChat]);
 
   const fetchMessages = async () => {
     if (!selectedChat) return;

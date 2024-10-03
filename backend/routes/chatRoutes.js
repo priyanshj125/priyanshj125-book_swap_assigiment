@@ -19,25 +19,31 @@ router.post('',fetchuser,asyncHandler(async(req, res) => {
         var isChat = await Chat.find({
           isGroupChat: false,
           $and: [
-            { users: { $in: [req.user._id] } },
+            { users: { $in: [req.user.id] } },
             { users: { $in: [userId] } }
           ]
         })
         .populate("users", "-password")
         .populate("latestMessage");
         console.log("acesss api call success");
-    
+       console.log("acesss api call...................................")
+       console.log(req.user.id);
+       console.log(userId);
+       console.log("acesss api call...................................")
       isChat = await User.populate(isChat, { 
         path: "latestMessage.sender",
         select: "name pic email",
       });
       if (isChat.length > 0) {
+        console.log("ressssssssssssssssssssssss");
+        console.log();
+        console.log("ressssssssssssssssssssssss");
         res.send(isChat[0]);
       } else {
         var chatData = {
           chatName: "sender",
           isGroupChat: false,
-          users: [req.user._id, userId],
+          users: [req.user.id, userId],
         };
 
 
@@ -61,7 +67,7 @@ router.post('',fetchuser,asyncHandler(async(req, res) => {
 
 //fetchallchat
 router.get('/fetchchat',fetchuser,asyncHandler(async(req, res) => {
-    try { Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+    try { Chat.find({ users: { $elemMatch: { $eq: req.user.id } } })
     .populate("users", "-password")
     .populate("groupAdmin", "-password")
     .populate("latestMessage")

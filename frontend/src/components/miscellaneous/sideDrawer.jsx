@@ -80,15 +80,15 @@ function SideDrawer() {
       };
       // http://www.localhost:5000/api/auth/alluser
       // console.log(search+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
       // const { data } = await axios.get(`http:localhost:5000/api/auth/alluser?search=`, config);
-      const { data } = await axios.get(`http://www.localhost:5000/api/auth/alluser?search=`, {
+      const { data } = await axios.get(`http://www.localhost:5000/api/auth/alluser?search=${search}`, {
         headers: {
           "Authorization": token
         },
       });
 
-      // console.log(data);
+      console.log("ccccccccccccccalllllllll");
+      console.log(data);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -118,10 +118,12 @@ function SideDrawer() {
       };
       const { data } = await axios.post(`http://www.localhost:5000/api/chat`, { userId },  {
         headers: {
+          "Content-Type":"application/json",
           "Authorization": token
         },
       });
-      console.log(data+"::: access dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      // console.log(data+"::: access dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      // console.log(userId+"access dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       // console.log(chats+"::: access datazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
 
       // if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);

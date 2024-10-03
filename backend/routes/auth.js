@@ -91,6 +91,7 @@ router.post('/login', [
                 // token: generateToken(user._id),
             }
         };
+        console.log(data);
 
         const authtoken = jwt.sign(data ,JWT_SECRET);
         success = true;
@@ -115,14 +116,17 @@ router.post('/getuser', async (req, res) => {
  //  /api/auth/alluser?search=priyansh
 
  router.get('/alluser',fetchuser,async(req, res) => {//+
-          const keyword = req.query.search?{//+
+    console.log("req.query.search:");
+
+          const keyword = req.query.search?{
           $or: [
                     { name: { $regex: req.query.search, $options: 'i' } },
                     { email: { $regex: req.query.search, $options: 'i' } }
                 ]
        }: {}
-       const users = await User.find(keyword && { _id: { $ne: req.user._id } })
+       const users = await User.find(keyword && { _id: { $ne: req.user.id } })
        console.log("alluser api call success");
+       console.log(req.user.id );
        res.send(users)
 //    console.log(keyword); 
  });
