@@ -10,6 +10,9 @@ import authrouter from './routes/auth.js';
 import nodemailer from 'nodemailer';
 import http from 'http';
 import { Server } from 'socket.io';
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables
 
 const app = express();
 
@@ -34,20 +37,37 @@ io.on("connection", (socket) => {
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
-    
-    socket.on("disconnect", () => {
-      console.log("USER DISCONNECTED");
-      socket.leave(userData._id);
+  });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User Joined Room: " + room);
+  });
+
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved.chat;
+
+    if (!chat.users) return console.log("chat.users not defined");
+
+    chat.users.forEach((user) => {
+      if (user._id == newMessageRecieved.sender._id) return;
+
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
     });
   });
 
-  // Other socket event handlers...
+  socket.on("disconnect", () => {
+    console.log("USER DISCONNECTED");
+  });
 });
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Use environment variables
+    user: process.env.EMAIL_USER, // Ensure environment variables are set correctly
     pass: process.env.EMAIL_PASS,
   },
 });
@@ -72,17 +92,19 @@ app.post('/send-email', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  return res.status(404).send("book exchange");
+  return res.status(404).send("Book exchange");
 });
 
 app.use('/books', router);
 app.use('/api/auth', authrouter);
 app.use('/api/chat', chatRouter);
 
-connectDb().then(() => {
-  server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+connectDb()
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("index.js error:", err);
   });
-}).catch((err) => {
-  console.error("index.js error:", err);
-});

@@ -5,6 +5,7 @@ import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import fetchuser from '../model/middleware/fetchuser.js';
+import { v2 as cloudinary } from 'cloudinary';
 
 const router = express.Router();
 
@@ -15,10 +16,11 @@ router.post('/createuser', [
     body('name').not().isEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Email is not valid'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-    body('pic').optional()
+    body('pic')
 ], async (req, res) => {
     let success = false;
 
+    console.log(body.name);
     const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ success, error: error.array() });
@@ -29,7 +31,7 @@ router.post('/createuser', [
         if (users) {
             return res.status(400).json({ success, error: 'Email already exists' });
         }
-
+        
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
         const user = await User.create({
@@ -39,6 +41,8 @@ router.post('/createuser', [
             plan: 'free',
             pic: req.body.pic
         });
+        console.log(user.pic);
+        console.log("awuthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         const data = {
             id: user._id,
             name: user.name,
@@ -115,21 +119,26 @@ router.post('/getuser', async (req, res) => {
 });
  //  /api/auth/alluser?search=priyansh
 
- router.get('/alluser',fetchuser,async(req, res) => {//+
-    console.log("req.query.search:");
-
-          const keyword = req.query.search?{
-          $or: [
-                    { name: { $regex: req.query.search, $options: 'i' } },
-                    { email: { $regex: req.query.search, $options: 'i' } }
-                ]
-       }: {}
-       const users = await User.find(keyword && { _id: { $ne: req.user.id } })
-       console.log("alluser api call success");
-       console.log(req.user.id );
-       res.send(users)
-//    console.log(keyword); 
- });
-
+ router.get('/alluser', fetchuser, async (req, res) => {
+    try {
+      // Construct the search keyword
+   
+        const keyword = req.query.search
+          ? {
+              $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+              ],
+            }
+          : {};
+      
+        const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+        res.send(users);
+      ;
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: "Server Error" });
+    }
+  });
 
 export default router;

@@ -184,17 +184,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent={{ base: "space-between" }}
             alignItems="center"
           >
+            
             <IconButton
               display={{ base: "flex", md: "none" }}
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
+            
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
-                  {getSender(user, selectedChat.users)}
+                  {getSender(user,selectedChat.users)}
                   <ProfileModal
-                    user={getSenderFull(user, selectedChat.users)}
+                    user={getSenderFull(user,selectedChat.users)}
                   />
                 </>
               ) : (
@@ -208,6 +210,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </>
               ))}
           </Text>
+        
           <Box
             display="flex"
             flexDir="column"

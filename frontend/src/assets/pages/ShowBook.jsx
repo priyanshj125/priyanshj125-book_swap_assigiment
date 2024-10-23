@@ -3,8 +3,16 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import ButtonBlack from '../../components/ButtonBlack';
 import Loading from '../../components/loading';
+import { useNavigate } from 'react-router-dom';
 
 const ShowBook = () => {
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem('token') || localStorage.getItem('token')==undefined) {
+      navigate('/login');
+    }
+  }, [navigate]);
   const [book, setBooks] = useState({});
   const [loading, setLoading] = useState(false);
   const { id } = useParams();

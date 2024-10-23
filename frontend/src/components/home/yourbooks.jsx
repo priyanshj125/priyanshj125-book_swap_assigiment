@@ -13,6 +13,14 @@ const Yourbooks = () => {
     const [showType, setShowType] = useState('table');
     let navigate = useNavigate();
 
+
+    
+    useEffect(() => {
+      if (!localStorage.getItem('token') || localStorage.getItem('token')==undefined) {
+        navigate('/login');
+      }
+    }, [navigate]);
+
     useEffect(() => {
         const fetchBooks = async () => {
             const token = localStorage.getItem('token');

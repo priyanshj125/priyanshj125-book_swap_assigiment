@@ -36,7 +36,7 @@ const Login = (props) => {
       }, 500);
         }
         else {
-          // props.showalert("invalid credenstials","danger")
+          alert("invalid credenstials","danger")
           history("/login")
         }
       }

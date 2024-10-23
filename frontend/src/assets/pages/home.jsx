@@ -5,11 +5,23 @@ import { Link } from 'react-router-dom';
 import { MdOutlineAddBox } from 'react-icons/md'; 
 import Booktable from '../../components/home/booktable';
 import Card from '../../components/home/card';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showType, setShowType] = useState('table'); 
+
+
+  let navigate = useNavigate();
+   
+  useEffect(() => {
+    if (!localStorage.getItem('token') || localStorage.getItem('token')==undefined) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+
 
   useEffect(() => {
     setLoading(true);

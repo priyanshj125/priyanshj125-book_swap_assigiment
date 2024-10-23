@@ -107,9 +107,8 @@ function SideDrawer() {
 
   const accessChat = async (userId) => {
     try {
-  console.log("sidedrwaer have toke "+ token);
 
-      setLoadingChat(true);
+      setLoadingChat(true)
       const config = {
         headers: {
           "Content-type": "application/json",

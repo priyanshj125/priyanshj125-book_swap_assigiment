@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/layout";
 
 function ChatBox({ fetchAgain, setFetchAgain }) {
   const { selectedChat } = ChatState();
+  
   return (
     <>
      <Box

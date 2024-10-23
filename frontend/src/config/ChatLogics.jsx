@@ -1,11 +1,12 @@
 export const isSameSenderMargin = (messages, m, i, userId) => {
     // console.log(i === messages.length - 1);
+   
   
     if (
       i < messages.length - 1 &&
-      messages[i + 1].sender._id === m.sender._id &&
+      messages[i + 1].sender._id === m.sender._id && 
       messages[i].sender._id !== userId
-    )
+    )  
       return 33;
     else if (
       (i < messages.length - 1 &&
@@ -39,24 +40,31 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
   };
   
   export const getSender = (loggedUser, users) => {
-    if (users && users.length > 0) {
-
-      console.log(users);
-      return users[0]?._id === loggedUser.user?.id ? users[1].name : users[0].name;
-     
-    } else {
-      console.log(JSON.stringify(users._id));
-      console.log("aaaaaa");
-      console.log(JSON.stringify(loggedUser.user.id));
-      console.log("aaaaaa");
-
-      console.log("Users array is empty or undefined");
+   
+    try {
+      
+      if (users && users.length > 0) {
+  
+        console.log(users);
+        return users[0]?._id === loggedUser.user?.id ? users[1].name : users[0].name;
+       
+      } else {
+        console.log(JSON.stringify(users._id));
+        console.log("aaaaaa");
+        console.log(JSON.stringify(loggedUser.user.id));
+        console.log("aaaaaa");
+  
+        console.log("Users array is empty or undefined");
+      }
+  
+      return true
+    } catch (error) {
+      window.location.reload(); 
+      
     }
-
-    return true
   };
   
   
   export const getSenderFull = (loggedUser, users) => {
-    return users[0]._id === loggedUser._id ? users[1] : users[0];
+    return users[0]._id === loggedUser._id ? users[0] : users[1];
   };
