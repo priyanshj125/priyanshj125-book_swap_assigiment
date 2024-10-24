@@ -17,9 +17,9 @@ const Navbar = () => {
   return (
     <div>
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <h1 className='text-3xl font-extralight text-black-600 tracking-tight'>swapnow</h1>
+        <h1 className='text-3xl font-extralight text-black-600 tracking-tight'>Swapnow</h1>
         <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
-          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/home">Home</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-800" to="/home">Home</Link></li>
           <li className="text-gray-300">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -30,10 +30,10 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-4 h-4 current-fill" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
           </li>
-          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/yourbooks">YourBooks</Link></li>
-          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/pricing">Pricing</Link></li>
-          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/contact">Contact</Link></li>
-          <li><Link className="text-sm text-gray-400 hover:text-gray-500" to="/chats">messagechats</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-800" to="/yourbooks">YourBooks</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-800" to="/pricing">Pricing</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-800" to="/contact">Contact</Link></li>
+          <li><Link className="text-sm text-gray-400 hover:text-gray-800" to="/chats">Messagechats</Link></li>
         </ul>
         {!token || !userInfo  ? (
           <>

@@ -3,7 +3,7 @@ import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
-import { getSender, getSenderFull } from "../config/ChatLogics";
+import { getSender, getSenderFull,getSender2 } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -11,6 +11,8 @@ import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
+import { Image } from "@chakra-ui/react";
+import { ChatIcon } from "@chakra-ui/icons"; // for a chat icon
 
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
@@ -194,10 +196,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
-                  {getSender(user,selectedChat.users)}
+                 {getSender2(user,selectedChat.users)}
                   <ProfileModal
                     user={getSenderFull(user,selectedChat.users)}
                   />
+                  
                 </>
               ) : (
                 <>
@@ -265,11 +268,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           </Box>
         </>
       ) : (
-        <Box display="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
-          </Text>
-        </Box>
+        <Box 
+  display="flex" 
+  alignItems="center" 
+  justifyContent="center" 
+  height="100%" 
+  width="100%"
+  bgGradient="linear(to-r, white.200, gray.300)" // Adding gradient background
+  p={6} // Padding to make it more spacious
+  borderRadius="lg" // Rounded corners
+  boxShadow="xl" // Adding shadow for a card-like effect
+>
+  <Box display="flex" flexDirection="column" alignItems="center">
+    <ChatIcon w={12} h={12} color="blue.100" mb={4} /> 
+    
+  
+
+    <Text fontSize="3xl" pb={3} fontFamily="Work sans" fontWeight="bold" color="gray.800">
+      Click on a user to start chatting
+    </Text>
+   
+  </Box>
+</Box>
       )}
     </>
   );

@@ -14,12 +14,7 @@ const Booktable = ({ books }) => {
     }
   }, [navigate]);
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
-      // Handle delete functionality here
-      console.log(`Book with ID ${id} will be deleted.`);
-    }
-  };
+
 
   return (
     <div className="overflow-x-auto p-6 bg-gray-50 shadow-lg rounded-lg">
@@ -51,13 +46,13 @@ const Booktable = ({ books }) => {
                   <Link to={`/books/edit/${book._id}`} className="text-yellow-500 hover:text-yellow-300" title="Edit Book">
                     <AiOutlineEdit size="20" />
                   </Link>
-                  <button
-                    onClick={() => handleDelete(book._id)}
+                  <Link
+                    to={`/books/delete/${book._id}`}
                     className="text-red-600 hover:text-red-400"
                     title="Delete Book"
                   >
                     <MdOutlineDelete size="20" />
-                  </button>
+                  </Link>
                 </div>
               </td>
             </tr>

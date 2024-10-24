@@ -16,3 +16,44 @@ body, html {
   scrollbar-width: none;     /* Firefox */
 }
   
+/* Home.css */
+
+/* Add a smooth hover effect for the book cards */
+.book-ad {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Scale the book card slightly on hover */
+.book-ad:hover {
+  transform: scale(1.05);
+}
+
+/* Featured books slider styles */
+.featured-books-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.featured-books-slider .book-ad {
+  scroll-snap-align: start;
+}
+
+/* Make the featured books responsive */
+@media (max-width: 768px) {
+  .book-ad {
+    width: 150px;
+    height: 200px;
+  }
+}
+
+/* Add responsiveness for small screens */
+@media (max-width: 640px) {
+  .featured-books-slider {
+    flex-direction: column;
+  }
+
+  .book-ad {
+    margin-bottom: 10px;
+  }
+}
